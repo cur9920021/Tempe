@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Invoice - Matte Black Premium</title>
+<link rel="stylesheet" href="style.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">ACME</div>
+        <div class="brand-meta">
+          <div>ACME Corporation</div>
+          <div>123 Luxury Ave, Suite 500</div>
+          <div>Metropolis, NY 10001</div>
+          <div>+1 (212) 555-0199 • billing@acme.co</div>
+        </div>
+      </div>
+      <div class="header-accent" aria-hidden="true"></div>
+      <div class="invoice-meta">
+        <div class="invoice-title">INVOICE</div>
+        <div class="meta-grid">
+          <div>
+            <div class="label">Invoice No.</div>
+            <div class="value" id="inv-number">INV-2025-001</div>
+          </div>
+          <div>
+            <div class="label">Date</div>
+            <div class="value" id="inv-date">2025-10-01</div>
+          </div>
+          <div>
+            <div class="label">Due Date</div>
+            <div class="value" id="inv-due">2025-10-15</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="parties">
+        <div class="bill-from">
+          <div class="section-title">From</div>
+          <div class="text-sm">ACME Corporation</div>
+          <div class="text-sm">123 Luxury Ave, Suite 500</div>
+          <div class="text-sm">Metropolis, NY 10001</div>
+          <div class="text-sm">Tax ID: 12-3456789</div>
+        </div>
+        <div class="bill-to">
+          <div class="section-title">Bill To</div>
+          <div class="text-sm" id="client-name">Wayne Enterprises</div>
+          <div class="text-sm" id="client-address">1007 Mountain Drive</div>
+          <div class="text-sm" id="client-city">Gotham, NJ 07001</div>
+          <div class="text-sm" id="client-email">ap@wayneenterprises.com</div>
+        </div>
+      </section>
+
+      <section class="items">
+        <table class="item-table" cellspacing="0" cellpadding="0">
+          <thead>
+            <tr>
+              <th class="col-desc">Description</th>
+              <th class="col-qty">Qty</th>
+              <th class="col-rate">Rate</th>
+              <th class="col-amount">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="items-body">
+            <tr>
+              <td>Enterprise consulting package</td>
+              <td>1</td>
+              <td>$12,000.00</td>
+              <td>$12,000.00</td>
+            </tr>
+            <tr>
+              <td>Security architecture review</td>
+              <td>1</td>
+              <td>$6,500.00</td>
+              <td>$6,500.00</td>
+            </tr>
+            <tr>
+              <td>On-site implementation support (3 days)</td>
+              <td>3</td>
+              <td>$1,250.00</td>
+              <td>$3,750.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="summary">
+        <div class="notes">
+          <div class="section-title">Notes</div>
+          <p class="text-sm">Thank you for your business. Payment is due within 14 days by bank transfer or card. Late payments may incur a 1.5% monthly fee.</p>
+        </div>
+        <div class="totals">
+          <div class="row"><span>Subtotal</span><span id="subtotal">$22,250.00</span></div>
+          <div class="row"><span>Tax (8%)</span><span id="tax">$1,780.00</span></div>
+          <div class="row grand"><span>Total Due</span><span id="total">$24,030.00</span></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-accent" aria-hidden="true"></div>
+      <div class="footer-grid">
+        <div>
+          <div class="label">Bank</div>
+          <div class="value">Gotham National Bank</div>
+        </div>
+        <div>
+          <div class="label">IBAN</div>
+          <div class="value">GB29 NWBK 6016 1331 9268 19</div>
+        </div>
+        <div>
+          <div class="label">SWIFT</div>
+          <div class="value">NWBKGB2L</div>
+        </div>
+        <div>
+          <div class="label">Website</div>
+          <div class="value">acme.co</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toolbar">
+    <button id="downloadBtn" class="btn-primary">Download PDF</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5lH8RCf8NwClfwimw5cPsp8Dh+GwF4mD1q6wPkX3WgX4t4rQhS2g4X7j5L0t7QHf3vI3yH5v0rjv0UQnQ0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-Yk1K4oKfGkz0H1kZp2kS9m0f8q2YF0JkQz3xN8u6y1O3gJ6Y7CwWQ2mLwX7O8vZ9lYwV1d1l5z7xQn4Y8k5Z2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="script.js"></script>
+</body>
+</html>
