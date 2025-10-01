@@ -139,15 +139,43 @@ thead th:last-child{border-top-right-radius:6px}
 .btn-primary{background:linear-gradient(180deg,#ffd84d,#ffcc00);color:#0a0a0a;border:none;padding:10px 16px;font-weight:700;border-radius:10px;cursor:pointer;box-shadow:0 8px 18px rgba(255,204,0,.28)}
 .btn-primary[disabled]{opacity:.6;cursor:not-allowed}
 
+/* Client form */
+.client-form{background:#fff;padding:14px 22px 0;border-bottom:1px solid var(--border)}
+.client-form-inner{border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.cf-head{background:var(--navy);color:#fff;padding:10px 12px;font-weight:700;letter-spacing:.3px}
+.cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.cf-field{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+.cf-field input{border:1px solid var(--border);border-radius:6px;padding:10px 10px;font-size:12px;outline:none}
+.cf-field input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,204,51,.25)}
+.cf-actions{display:flex;justify-content:flex-end;padding:0 12px 12px}
+
 @media print{
   body{background:#fff}
   .toolbar{display:none!important}
+  .client-form{display:none}
   .page{margin:0;box-shadow:none;width:210mm;min-height:297mm}
 }
 </style>
 </head>
 <body>
   <div id="invoice" class="page">
+    <section class="client-form" aria-label="Client information">
+      <div class="client-form-inner">
+        <div class="cf-head">Client Details</div>
+        <div class="cf-grid">
+          <label class="cf-field"><span>Company Name</span><input id="cf-company" type="text" placeholder="Client company"/></label>
+          <label class="cf-field"><span>Client Name</span><input id="cf-client-name" type="text" placeholder="Person receiving invoice"/></label>
+          <label class="cf-field"><span>Project Name</span><input id="cf-project" type="text" placeholder="Project"/></label>
+          <label class="cf-field"><span>Area</span><input id="cf-area" type="text" placeholder="Area"/></label>
+          <label class="cf-field"><span>Location</span><input id="cf-location" type="text" placeholder="Location"/></label>
+          <label class="cf-field"><span>Contact Person</span><input id="cf-contact-person" type="text" placeholder="Contact person"/></label>
+          <label class="cf-field"><span>Contact Number</span><input id="cf-contact-number" type="tel" placeholder="Contact number"/></label>
+        </div>
+        <div class="cf-actions">
+          <button id="applyClientBtn" class="btn-primary">Apply to Invoice</button>
+        </div>
+      </div>
+    </section>
     <header class="header">
       <div class="header-top">
         <div class="brand">
@@ -177,11 +205,15 @@ thead th:last-child{border-top-right-radius:6px}
           <p>Cairo, Egypt</p>
           <p>TRN: 652597947</p>
         </div>
-        <div class="party">
+        <div class="party" id="bill-to">
           <div class="card-head">INVOICE TO</div>
-          <p>Name Surname</p>
-          <p>Street X, City X, 00000</p>
-          <p>Country</p>
+          <p id="bt-company">Client Company</p>
+          <p id="bt-client">Client Name</p>
+          <p id="bt-project">Project:</p>
+          <p id="bt-area">Area:</p>
+          <p id="bt-location">Location:</p>
+          <p id="bt-contact-person">Contact Person:</p>
+          <p id="bt-contact-number">Contact Number:</p>
         </div>
       </section>
 
@@ -272,6 +304,7 @@ thead th:last-child{border-top-right-radius:6px}
   <script>
   (function(){
     const downloadBtn=document.getElementById('downloadBtn');
+    const applyBtn=document.getElementById('applyClientBtn');
     function setBusy(isBusy){
       if(!downloadBtn) return;
       if(isBusy){
@@ -316,6 +349,25 @@ thead th:last-child{border-top-right-radius:6px}
         alert('PDF export failed. Please try again in a modern browser.');
       }finally{ setBusy(false); }
     });
+    function applyClientToInvoice(){
+      const get=(id)=>{const el=document.getElementById(id);return el?el.value.trim():""};
+      const put=(id,text)=>{const el=document.getElementById(id);if(el) el.textContent=text};
+      const company=get('cf-company');
+      const client=get('cf-client-name');
+      const project=get('cf-project');
+      const area=get('cf-area');
+      const location=get('cf-location');
+      const contactPerson=get('cf-contact-person');
+      const contactNumber=get('cf-contact-number');
+      put('bt-company', company || 'Client Company');
+      put('bt-client', client || 'Client Name');
+      put('bt-project', project?`Project: ${project}`:'Project:');
+      put('bt-area', area?`Area: ${area}`:'Area:');
+      put('bt-location', location?`Location: ${location}`:'Location:');
+      put('bt-contact-person', contactPerson?`Contact Person: ${contactPerson}`:'Contact Person:');
+      put('bt-contact-number', contactNumber?`Contact Number: ${contactNumber}`:'Contact Number:');
+    }
+    if(applyBtn){ applyBtn.addEventListener('click', applyClientToInvoice); }
   })();
   </script>
   </body>
