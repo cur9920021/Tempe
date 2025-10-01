@@ -148,6 +148,7 @@ thead th:last-child{border-top-right-radius:6px}
 .cf-field input{border:1px solid var(--border);border-radius:6px;padding:10px 10px;font-size:12px;outline:none}
 .cf-field input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,204,51,.25)}
 .cf-actions{display:flex;justify-content:flex-end;padding:0 12px 12px}
+.items-form{margin-top:12px}
 
 @media print{
   body{background:#fff}
@@ -158,8 +159,7 @@ thead th:last-child{border-top-right-radius:6px}
 </style>
 </head>
 <body>
-  <div id="invoice" class="page">
-    <section class="client-form" aria-label="Client information">
+  <section class="client-form" aria-label="Client information">
       <div class="client-form-inner">
         <div class="cf-head">Client Details</div>
         <div class="cf-grid">
@@ -176,6 +176,25 @@ thead th:last-child{border-top-right-radius:6px}
         </div>
       </div>
     </section>
+
+    <section class="client-form items-form" aria-label="Invoice items">
+      <div class="client-form-inner">
+        <div class="cf-head">Invoice Items</div>
+        <div class="cf-grid">
+          <label class="cf-field"><span>Item Code</span><input id="it-code" type="text" placeholder="e.g. AF-001"/></label>
+          <label class="cf-field"><span>Item Type</span><input id="it-type" type="text" placeholder="e.g. Curtain"/></label>
+          <label class="cf-field"><span>Item Name</span><input id="it-name" type="text" placeholder="e.g. Blackout Fabric"/></label>
+          <label class="cf-field"><span>Item Color</span><input id="it-color" type="text" placeholder="e.g. Charcoal"/></label>
+          <label class="cf-field"><span>Quantity</span><input id="it-qty" type="number" min="0" step="1" placeholder="0"/></label>
+          <label class="cf-field"><span>Unit Price</span><input id="it-price" type="number" min="0" step="0.01" placeholder="0.00"/></label>
+        </div>
+        <div class="cf-actions">
+          <button id="addItemBtn" class="btn-primary">Add Item</button>
+        </div>
+      </div>
+    </section>
+
+  <div id="invoice" class="page">
     <header class="header">
       <div class="header-top">
         <div class="brand">
@@ -207,9 +226,9 @@ thead th:last-child{border-top-right-radius:6px}
         </div>
         <div class="party" id="bill-to">
           <div class="card-head">INVOICE TO</div>
-          <p id="bt-company">Client Company</p>
-          <p id="bt-client">Client Name</p>
-          <p id="bt-project">Project:</p>
+          <p id="bt-company">Company Name:</p>
+          <p id="bt-client">Client Name:</p>
+          <p id="bt-project">Project Name:</p>
           <p id="bt-area">Area:</p>
           <p id="bt-location">Location:</p>
           <p id="bt-contact-person">Contact Person:</p>
@@ -223,42 +242,11 @@ thead th:last-child{border-top-right-radius:6px}
             <tr>
               <th class="col-desc">DESCRIPTION</th>
               <th class="col-qty">QTY</th>
-              <th class="col-price">PRICE</th>
-              <th class="col-total">TOTAL</th>
+              <th class="col-price">UNIT PRICE</th>
+              <th class="col-total">AMOUNT</th>
             </tr>
           </thead>
-          <tbody id="items-body">
-            <tr>
-              <td>Lorem ipsum dolor sit amet</td>
-              <td>1</td>
-              <td>$1</td>
-              <td class="col-total">$1</td>
-            </tr>
-            <tr>
-              <td>Consectetur adipiscing elit</td>
-              <td>1</td>
-              <td>$1</td>
-              <td class="col-total">$1</td>
-            </tr>
-            <tr>
-              <td>Sed do eiusmod tempor</td>
-              <td>1</td>
-              <td>$1</td>
-              <td class="col-total">$1</td>
-            </tr>
-            <tr>
-              <td>Incididunt ut labore</td>
-              <td>1</td>
-              <td>$1</td>
-              <td class="col-total">$1</td>
-            </tr>
-            <tr>
-              <td>Et dolore magna aliqua</td>
-              <td>1</td>
-              <td>$1</td>
-              <td class="col-total">$1</td>
-            </tr>
-          </tbody>
+          <tbody id="items-body"></tbody>
         </table>
       </section>
 
@@ -271,9 +259,9 @@ thead th:last-child{border-top-right-radius:6px}
           </div>
         </div>
         <div class="totals">
-          <div class="row"><span>SUBTOTAL</span><span id="subtotal">$130</span></div>
-          <div class="row"><span>TAX</span><span id="tax">$20</span></div>
-          <div class="row total"><span>TOTAL</span><span id="total">$150</span></div>
+          <div class="row"><span>SUBTOTAL</span><span id="subtotal">$0.00</span></div>
+          <div class="row"><span>TAX</span><span id="tax">$0.00</span></div>
+          <div class="row total"><span>TOTAL</span><span id="total">$0.00</span></div>
         </div>
       </section>
 
@@ -305,6 +293,8 @@ thead th:last-child{border-top-right-radius:6px}
   (function(){
     const downloadBtn=document.getElementById('downloadBtn');
     const applyBtn=document.getElementById('applyClientBtn');
+    const addItemBtn=document.getElementById('addItemBtn');
+    const TAX_RATE=0.0; // Adjust if needed
     function setBusy(isBusy){
       if(!downloadBtn) return;
       if(isBusy){
@@ -359,15 +349,43 @@ thead th:last-child{border-top-right-radius:6px}
       const location=get('cf-location');
       const contactPerson=get('cf-contact-person');
       const contactNumber=get('cf-contact-number');
-      put('bt-company', company || 'Client Company');
-      put('bt-client', client || 'Client Name');
-      put('bt-project', project?`Project: ${project}`:'Project:');
+      put('bt-company', company?`Company Name: ${company}`:'Company Name:');
+      put('bt-client', client?`Client Name: ${client}`:'Client Name:');
+      put('bt-project', project?`Project Name: ${project}`:'Project Name:');
       put('bt-area', area?`Area: ${area}`:'Area:');
       put('bt-location', location?`Location: ${location}`:'Location:');
       put('bt-contact-person', contactPerson?`Contact Person: ${contactPerson}`:'Contact Person:');
       put('bt-contact-number', contactNumber?`Contact Number: ${contactNumber}`:'Contact Number:');
     }
     if(applyBtn){ applyBtn.addEventListener('click', applyClientToInvoice); }
+
+    function currency(n){return new Intl.NumberFormat(undefined,{style:'currency',currency:'USD',minimumFractionDigits:2}).format(n||0)}
+    function recalcTotals(){
+      const rows=[...document.querySelectorAll('#items-body tr')];
+      let subtotal=0;
+      rows.forEach(r=>{const amt=parseFloat(r.dataset.amount||'0'); if(!isNaN(amt)) subtotal+=amt});
+      const tax=subtotal*TAX_RATE; const total=subtotal+tax;
+      const setText=(id,val)=>{const el=document.getElementById(id); if(el) el.textContent=currency(val)};
+      setText('subtotal',subtotal); setText('tax',tax); setText('total',total);
+    }
+    function addItem(){
+      const code=(document.getElementById('it-code')||{}).value||'';
+      const type=(document.getElementById('it-type')||{}).value||'';
+      const name=(document.getElementById('it-name')||{}).value||'';
+      const color=(document.getElementById('it-color')||{}).value||'';
+      const qty=parseFloat((document.getElementById('it-qty')||{}).value||'0')||0;
+      const price=parseFloat((document.getElementById('it-price')||{}).value||'0')||0;
+      const amount=qty*price;
+      const tbody=document.getElementById('items-body'); if(!tbody) return;
+      const tr=document.createElement('tr');
+      tr.dataset.amount=String(amount);
+      const descParts=[code&&`[${code}]`, type, name, color&&`(${color})`].filter(Boolean);
+      const desc=descParts.join(' ');
+      tr.innerHTML=`<td>${desc||'Item'}</td><td>${qty}</td><td>${currency(price)}</td><td class="col-total">${currency(amount)}</td>`;
+      tbody.appendChild(tr);
+      recalcTotals();
+    }
+    if(addItemBtn){ addItemBtn.addEventListener('click', addItem); }
   })();
   </script>
   </body>
