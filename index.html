@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="page">
+  <div id="invoice" class="page">
     <header class="header">
       <div class="brand">
         <div class="logo">ACME</div>
@@ -132,7 +132,9 @@
     <button id="downloadBtn" class="btn-primary">Download PDF</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" referrerpolicy="no-referrer"></script>
+  <!-- Switch to html2canvas + jsPDF CDNs for direct browser usage -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5lH8RCf8NwClfwimw5cPsp8Dh+GwF4mD1q6wPkX3WgX4t4rQhS2g4X7j5L0t7QHf3vI3yH5v0rjv0UQnQ0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-Yk1K4oKfGkz0H1kZp2kS9m0f8q2YF0JkQz3xN8u6y1O3gJ6Y7CwWQ2mLwX7O8vZ9lYwV1d1l5z7xQn4Y8k5Z2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="script.js"></script>
 </body>
 </html>
