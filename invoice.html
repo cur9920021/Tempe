@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Invoice - Real Estate</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#0f1a33; /* header/footer dark navy */
+  --navy-2:#101c3a; /* table header */
+  --yellow:#f4b400; /* warm yellow accent */
+  --yellow-2:#ffcc33; /* lighter yellow accent blocks */
+  --text:#222431;
+  --muted:#7b7f8f;
+  --border:#e7e9ef;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:#f5f6fb;
+  font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
+  color:var(--text);
+}
+
+.page{
+  width:794px; /* A4 portrait at 96dpi */
+  min-height:1123px;
+  margin:24px auto 96px;
+  background:#fff;
+  box-shadow:0 10px 30px rgba(16,26,51,.12);
+  border-radius:6px;
+  overflow:hidden;
+}
+
+/* Header */
+.header{
+  position:relative;
+  padding:0;
+}
+.header-top{
+  background:var(--navy);
+  color:#fff;
+  display:grid;
+  grid-template-columns:1fr 200px;
+  align-items:stretch;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px 22px;
+}
+.logo-box{
+  width:44px;height:44px;display:grid;place-items:center;
+  border:2px solid #fff;border-radius:8px;
+}
+.logo-icon{width:22px;height:22px;border:2px solid #fff;border-bottom:none;border-right:none;position:relative}
+.logo-icon:before{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%) rotate(45deg);width:14px;height:14px;border-left:2px solid #fff;border-top:2px solid #fff;background:transparent}
+.brand-text{
+  display:flex;flex-direction:column;line-height:1.1
+}
+.brand-title{font-weight:700;letter-spacing:.5px}
+.brand-sub{font-size:12px;opacity:.9}
+
+.top-right{
+  position:relative;background:#fff;color:var(--text);
+  padding:14px 18px 12px 18px;
+}
+.top-right:before{
+  content:"";position:absolute;left:-22px;top:0;width:22px;height:100%;background:var(--yellow);border-bottom-right-radius:10px;
+}
+.inv-meta{
+  display:grid;gap:6px;font-size:12px
+}
+.meta-row{display:flex;justify-content:space-between}
+.meta-label{color:var(--muted)}
+.meta-value{font-weight:600}
+
+.header-title{padding:18px 22px 6px 22px}
+.header-title h1{margin:0;font-size:22px;letter-spacing:1px}
+
+/* Parties */
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:4px 22px 0 22px}
+.card-head{color:#8dc63f;font-weight:700;font-size:12px;letter-spacing:.8px;margin-bottom:8px}
+.party p{margin:2px 0;font-size:12px;color:#3b3e4a}
+
+/* Table */
+.items{padding:16px 22px 0}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--navy-2);color:#fff;text-transform:uppercase;font-size:12px;letter-spacing:.6px;padding:10px 12px}
+tbody td{padding:10px 12px;font-size:12px;color:#2b2e3b;border-bottom:1px solid var(--border)}
+thead th:first-child{border-top-left-radius:6px}
+thead th:last-child{border-top-right-radius:6px}
+.col-desc{width:56%}
+.col-qty{width:10%}
+.col-price{width:17%}
+.col-total{width:17%;text-align:right}
+
+/* Payment + Totals */
+.bottom{display:grid;grid-template-columns:1fr 260px;gap:24px;padding:16px 22px}
+.payment{
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+}
+.payment .head{background:#fff3cc;color:#000;padding:10px 12px;font-weight:700;font-size:12px}
+.payment .body{padding:12px}
+.payment .body p{margin:4px 0;font-size:12px;color:#3a3d49}
+
+.totals{border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.totals .row{display:flex;justify-content:space-between;padding:8px 12px;font-size:12px;border-bottom:1px solid var(--border)}
+.totals .row:last-child{border-bottom:none}
+.totals .total{background:var(--yellow-2);color:#000;font-weight:700}
+
+/* Terms */
+.terms{padding:10px 22px 20px}
+.terms .head{font-weight:700;font-size:12px;margin-bottom:6px}
+.terms p{margin:0;color:#6a6e7f;font-size:11px;line-height:1.6}
+
+/* Footer */
+.footer{
+  background:var(--navy);
+  color:#fff;
+  padding:10px 22px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;font-size:12px
+}
+.footer .left, .footer .right{display:flex;gap:18px;align-items:center}
+.footer a{color:#fff;text-decoration:none}
+
+/* Toolbar */
+.toolbar{position:sticky;bottom:0;display:flex;justify-content:center;padding:16px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.15))}
+.btn-primary{background:linear-gradient(180deg,#ffd84d,#ffcc00);color:#0a0a0a;border:none;padding:10px 16px;font-weight:700;border-radius:10px;cursor:pointer;box-shadow:0 8px 18px rgba(255,204,0,.28)}
+.btn-primary[disabled]{opacity:.6;cursor:not-allowed}
+
+@media print{
+  body{background:#fff}
+  .toolbar{display:none!important}
+  .page{margin:0;box-shadow:none;width:210mm;min-height:297mm}
+}
+</style>
+</head>
+<body>
+  <div id="invoice" class="page">
+    <header class="header">
+      <div class="header-top">
+        <div class="brand">
+          <div class="logo-box"><div class="logo-icon" aria-hidden="true"></div></div>
+          <div class="brand-text">
+            <div class="brand-title">REAL</div>
+            <div class="brand-sub">ESTATE</div>
+          </div>
+        </div>
+        <div class="top-right">
+          <div class="inv-meta">
+            <div class="meta-row"><span class="meta-label">NUMBER</span><span class="meta-value" id="inv-number">281920</span></div>
+            <div class="meta-row"><span class="meta-label">DATE</span><span class="meta-value" id="inv-date">13/06/22</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="header-title">
+        <h1>INVOICE</h1>
+      </div>
+    </header>
+
+    <main>
+      <section class="parties">
+        <div class="party">
+          <div class="card-head">INVOICE TO</div>
+          <p>Name Surname</p>
+          <p>Street X, City X, 00000</p>
+          <p>Country</p>
+        </div>
+        <div class="party">
+          <div class="card-head">INVOICE TO</div>
+          <p>Name Surname</p>
+          <p>Street X, City X, 00000</p>
+          <p>Country</p>
+        </div>
+      </section>
+
+      <section class="items">
+        <table cellspacing="0" cellpadding="0">
+          <thead>
+            <tr>
+              <th class="col-desc">DESCRIPTION</th>
+              <th class="col-qty">QTY</th>
+              <th class="col-price">PRICE</th>
+              <th class="col-total">TOTAL</th>
+            </tr>
+          </thead>
+          <tbody id="items-body">
+            <tr>
+              <td>Lorem ipsum dolor sit amet</td>
+              <td>1</td>
+              <td>$1</td>
+              <td class="col-total">$1</td>
+            </tr>
+            <tr>
+              <td>Consectetur adipiscing elit</td>
+              <td>1</td>
+              <td>$1</td>
+              <td class="col-total">$1</td>
+            </tr>
+            <tr>
+              <td>Sed do eiusmod tempor</td>
+              <td>1</td>
+              <td>$1</td>
+              <td class="col-total">$1</td>
+            </tr>
+            <tr>
+              <td>Incididunt ut labore</td>
+              <td>1</td>
+              <td>$1</td>
+              <td class="col-total">$1</td>
+            </tr>
+            <tr>
+              <td>Et dolore magna aliqua</td>
+              <td>1</td>
+              <td>$1</td>
+              <td class="col-total">$1</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="bottom">
+        <div class="payment">
+          <div class="head">PAYMENT METHOD</div>
+          <div class="body">
+            <p>Bank account</p>
+            <p>0000 0000 0000 0000</p>
+          </div>
+        </div>
+        <div class="totals">
+          <div class="row"><span>SUBTOTAL</span><span id="subtotal">$130</span></div>
+          <div class="row"><span>TAX</span><span id="tax">$20</span></div>
+          <div class="row total"><span>TOTAL</span><span id="total">$150</span></div>
+        </div>
+      </section>
+
+      <section class="terms">
+        <div class="head">TERMS & CONDITIONS</div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet, metus vel suscipit bibendum, libero risus suscipit ipsum, at lacinia nunc mi at urna. Curabitur non odio at nunc facilisis placerat.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="left">
+        <span>www.realestate.com</span>
+        <span>|</span>
+        <a href="mailto:info@realestate.com">info@realestate.com</a>
+      </div>
+      <div class="right">
+        <span>+00 000 000 000</span>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toolbar">
+    <button id="downloadBtn" class="btn-primary">Download PDF</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+  (function(){
+    const downloadBtn=document.getElementById('downloadBtn');
+    function setBusy(isBusy){
+      if(!downloadBtn) return;
+      if(isBusy){
+        downloadBtn.setAttribute('disabled','true');
+        downloadBtn.dataset.originalText=downloadBtn.textContent;
+        downloadBtn.textContent='Preparing PDF…';
+      }else{
+        downloadBtn.removeAttribute('disabled');
+        if(downloadBtn.dataset.originalText){
+          downloadBtn.textContent=downloadBtn.dataset.originalText;delete downloadBtn.dataset.originalText;
+        }
+      }
+    }
+    function getJsPDFCtor(){
+      if(window.jspdf&&window.jspdf.jsPDF) return window.jspdf.jsPDF; if(window.jsPDF) return window.jsPDF; return null;
+    }
+    async function nextFrame(){return new Promise(r=>requestAnimationFrame(()=>r()))}
+    async function exportPdf(){
+      const invoiceEl=document.getElementById('invoice');
+      if(!invoiceEl) throw new Error('Invoice element not found');
+      if(document.fonts&&document.fonts.ready){try{await document.fonts.ready;}catch(e){}}
+      await nextFrame();
+      const scale=Math.max(2,Math.min(3,window.devicePixelRatio||2));
+      const canvas=await window.html2canvas(invoiceEl,{scale,useCORS:true,allowTaint:true,backgroundColor:'#ffffff',windowWidth:invoiceEl.scrollWidth,windowHeight:invoiceEl.scrollHeight});
+      const imgData=canvas.toDataURL('image/jpeg',0.98);
+      const JsPDF=getJsPDFCtor(); if(!JsPDF) throw new Error('jsPDF not available');
+      const pdf=new JsPDF({orientation:'p',unit:'mm',format:'a4'});
+      const pageWidth=pdf.internal.pageSize.getWidth(); const pageHeight=pdf.internal.pageSize.getHeight();
+      const pxToMm=25.4/96; const imgWidthMm=canvas.width*pxToMm; const imgHeightMm=canvas.height*pxToMm;
+      const ratio=Math.min(pageWidth/imgWidthMm,pageHeight/imgHeightMm); const renderW=imgWidthMm*ratio; const renderH=imgHeightMm*ratio; const offsetX=(pageWidth-renderW)/2; const offsetY=(pageHeight-renderH)/2;
+      pdf.addImage(imgData,'JPEG',offsetX,offsetY,renderW,renderH,undefined,'FAST');
+      pdf.save('invoice.pdf');
+    }
+    downloadBtn.addEventListener('click',async function(){
+      setBusy(true);
+      try{
+        if(!window.html2canvas) throw new Error('html2canvas not loaded');
+        if(!getJsPDFCtor()) throw new Error('jsPDF not loaded');
+        await exportPdf();
+      }catch(e){
+        console.error('PDF export failed:',e&&(e.stack||e.message)||e);
+        alert('PDF export failed. Please try again in a modern browser.');
+      }finally{ setBusy(false); }
+    });
+  })();
+  </script>
+  </body>
+  </html>
+
