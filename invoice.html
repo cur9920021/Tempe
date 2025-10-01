@@ -59,10 +59,11 @@ body{
 }
 .logo-box{
   width:44px;height:44px;display:grid;place-items:center;
-  border:2px solid var(--yellow-2);border-radius:8px;
+  border:2px solid var(--yellow-2);border-radius:8px;cursor:pointer;position:relative;overflow:hidden;background:#0e0e12;
 }
 .logo-icon{width:22px;height:22px;border:2px solid var(--yellow-2);border-bottom:none;border-right:none;position:relative}
 .logo-icon:before{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%) rotate(45deg);width:14px;height:14px;border-left:2px solid var(--yellow-2);border-top:2px solid var(--yellow-2);background:transparent}
+.logo-box img{max-width:100%;max-height:100%;object-fit:contain;display:none}
 .brand-text{
   display:flex;flex-direction:column;line-height:1.1
 }
@@ -212,11 +213,12 @@ thead th:last-child{border-top-right-radius:6px}
     <header class="header">
       <div class="header-top">
         <div class="brand">
-          <div class="logo-box"><div class="logo-icon" aria-hidden="true"></div></div>
+          <div class="logo-box" id="logoBox" title="Click to upload logo"><div class="logo-icon" aria-hidden="true"></div><img id="brandLogo" alt="Company logo"/></div>
           <div class="brand-text">
             <div class="brand-title">Align Fabrics & Curtains</div>
           </div>
         </div>
+        <input id="logoInput" type="file" accept="image/*" style="display:none" aria-label="Upload company logo" />
         <div class="top-right">
           <div class="inv-meta">
             <div class="meta-row"><span class="meta-label">NUMBER</span><span class="meta-value" id="inv-number">281920</span></div>
@@ -312,6 +314,9 @@ thead th:last-child{border-top-right-radius:6px}
     const applyBtn=document.getElementById('applyClientBtn');
     const addItemBtn=document.getElementById('addItemBtn');
     const VAT_RATE=0.14; // Optional VAT 14%
+    const logoBox=document.getElementById('logoBox');
+    const logoInput=document.getElementById('logoInput');
+    const brandLogo=document.getElementById('brandLogo');
     function setBusy(isBusy){
       if(!downloadBtn) return;
       if(isBusy){
@@ -356,6 +361,19 @@ thead th:last-child{border-top-right-radius:6px}
         alert('PDF export failed. Please try again in a modern browser.');
       }finally{ setBusy(false); }
     });
+    if(logoBox&&logoInput){
+      logoBox.addEventListener('click',()=>logoInput.click());
+      logoInput.addEventListener('change',()=>{
+        const file=logoInput.files&&logoInput.files[0];
+        if(!file) return;
+        const reader=new FileReader();
+        reader.onload=function(){
+          if(brandLogo){ brandLogo.src=String(reader.result||''); brandLogo.style.display='block'; }
+          const icon=logoBox.querySelector('.logo-icon'); if(icon) icon.style.display='none';
+        };
+        reader.readAsDataURL(file);
+      });
+    }
     function applyClientToInvoice(){
       const get=(id)=>{const el=document.getElementById(id);return el?el.value.trim():""};
       const put=(id,text)=>{const el=document.getElementById(id);if(el) el.textContent=text};
