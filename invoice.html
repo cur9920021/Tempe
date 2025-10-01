@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Invoice - Real Estate</title>
+<title>Invoice - Align Fabrics & Curtains</title>
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,11 +12,11 @@
 
 <style>
 :root{
-  --navy:#0f1a33; /* header/footer dark navy */
-  --navy-2:#101c3a; /* table header */
-  --yellow:#f4b400; /* warm yellow accent */
-  --yellow-2:#ffcc33; /* lighter yellow accent blocks */
-  --text:#222431;
+  --navy:#0b0b0d; /* deep black header/footer */
+  --navy-2:#141418; /* table header dark */
+  --yellow:#e6b800; /* gold accent */
+  --yellow-2:#ffcc33; /* lighter gold accent */
+  --text:#1f212d;
   --muted:#7b7f8f;
   --border:#e7e9ef;
 }
@@ -59,15 +59,15 @@ body{
 }
 .logo-box{
   width:44px;height:44px;display:grid;place-items:center;
-  border:2px solid #fff;border-radius:8px;
+  border:2px solid var(--yellow-2);border-radius:8px;
 }
-.logo-icon{width:22px;height:22px;border:2px solid #fff;border-bottom:none;border-right:none;position:relative}
-.logo-icon:before{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%) rotate(45deg);width:14px;height:14px;border-left:2px solid #fff;border-top:2px solid #fff;background:transparent}
+.logo-icon{width:22px;height:22px;border:2px solid var(--yellow-2);border-bottom:none;border-right:none;position:relative}
+.logo-icon:before{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%) rotate(45deg);width:14px;height:14px;border-left:2px solid var(--yellow-2);border-top:2px solid var(--yellow-2);background:transparent}
 .brand-text{
   display:flex;flex-direction:column;line-height:1.1
 }
-.brand-title{font-weight:700;letter-spacing:.5px}
-.brand-sub{font-size:12px;opacity:.9}
+.brand-title{font-weight:800;letter-spacing:.4px;font-size:18px;color:#fff}
+.brand-sub{display:none}
 
 .top-right{
   position:relative;background:#fff;color:var(--text);
@@ -153,8 +153,7 @@ thead th:last-child{border-top-right-radius:6px}
         <div class="brand">
           <div class="logo-box"><div class="logo-icon" aria-hidden="true"></div></div>
           <div class="brand-text">
-            <div class="brand-title">REAL</div>
-            <div class="brand-sub">ESTATE</div>
+            <div class="brand-title">Align Fabrics & Curtains</div>
           </div>
         </div>
         <div class="top-right">
@@ -172,10 +171,11 @@ thead th:last-child{border-top-right-radius:6px}
     <main>
       <section class="parties">
         <div class="party">
-          <div class="card-head">INVOICE TO</div>
-          <p>Name Surname</p>
-          <p>Street X, City X, 00000</p>
-          <p>Country</p>
+          <div class="card-head">FROM</div>
+          <p>Align Fabrics & Curtains</p>
+          <p>40 Mohamed Farid Street, Heliopolis, El Nozha</p>
+          <p>Cairo, Egypt</p>
+          <p>TRN: 652597947</p>
         </div>
         <div class="party">
           <div class="card-head">INVOICE TO</div>
