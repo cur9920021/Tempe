@@ -90,6 +90,8 @@ body{
 .parties{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:4px 22px 0 22px}
 .card-head{color:#8dc63f;font-weight:700;font-size:12px;letter-spacing:.8px;margin-bottom:8px}
 .party p{margin:2px 0;font-size:12px;color:#3b3e4a}
+.party p .lbl{font-weight:600;color:#2c2f3d;display:inline-block;min-width:16ch}
+.party p .val{color:#2b2e3b}
 
 /* Table */
 .items{padding:16px 22px 0}
@@ -118,6 +120,7 @@ thead th:last-child{border-top-right-radius:6px}
 .totals .row{display:flex;justify-content:space-between;padding:8px 12px;font-size:12px;border-bottom:1px solid var(--border)}
 .totals .row:last-child{border-bottom:none}
 .totals .total{background:var(--yellow-2);color:#000;font-weight:700}
+.totals .em{font-weight:700}
 
 /* Terms */
 .terms{padding:10px 22px 20px}
@@ -185,11 +188,22 @@ thead th:last-child{border-top-right-radius:6px}
           <label class="cf-field"><span>Item Type</span><input id="it-type" type="text" placeholder="e.g. Curtain"/></label>
           <label class="cf-field"><span>Item Name</span><input id="it-name" type="text" placeholder="e.g. Blackout Fabric"/></label>
           <label class="cf-field"><span>Item Color</span><input id="it-color" type="text" placeholder="e.g. Charcoal"/></label>
-          <label class="cf-field"><span>Quantity</span><input id="it-qty" type="number" min="0" step="1" placeholder="0"/></label>
+          <label class="cf-field"><span>Quantity</span><input id="it-qty" type="number" min="0" step="1" placeholder="1"/></label>
           <label class="cf-field"><span>Unit Price</span><input id="it-price" type="number" min="0" step="0.01" placeholder="0.00"/></label>
         </div>
         <div class="cf-actions">
           <button id="addItemBtn" class="btn-primary">Add Item</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="client-form items-form" aria-label="Totals options">
+      <div class="client-form-inner">
+        <div class="cf-head">Totals & Adjustments</div>
+        <div class="cf-grid">
+          <label class="cf-field"><span>Discount (e.g. 10% or 50)</span><input id="disc-input" type="text" placeholder="0"/></label>
+          <label class="cf-field"><span>VAT 14%</span><div><input id="vat-check" type="checkbox"/> <span style="font-size:12px;color:#3b3e4a">Apply VAT</span></div></label>
+          <label class="cf-field"><span>Shipping / Delivery</span><input id="ship-input" type="number" min="0" step="0.01" placeholder="0.00"/></label>
         </div>
       </div>
     </section>
@@ -226,13 +240,13 @@ thead th:last-child{border-top-right-radius:6px}
         </div>
         <div class="party" id="bill-to">
           <div class="card-head">INVOICE TO</div>
-          <p id="bt-company">Company Name:</p>
-          <p id="bt-client">Client Name:</p>
-          <p id="bt-project">Project Name:</p>
-          <p id="bt-area">Area:</p>
-          <p id="bt-location">Location:</p>
-          <p id="bt-contact-person">Contact Person:</p>
-          <p id="bt-contact-number">Contact Number:</p>
+          <p><span class="lbl">Company Name:</span><span id="bt-company" class="val"></span></p>
+          <p><span class="lbl">Client Name:</span><span id="bt-client" class="val"></span></p>
+          <p><span class="lbl">Project Name:</span><span id="bt-project" class="val"></span></p>
+          <p><span class="lbl">Area:</span><span id="bt-area" class="val"></span></p>
+          <p><span class="lbl">Location:</span><span id="bt-location" class="val"></span></p>
+          <p><span class="lbl">Contact Person:</span><span id="bt-contact-person" class="val"></span></p>
+          <p><span class="lbl">Contact Number:</span><span id="bt-contact-number" class="val"></span></p>
         </div>
       </section>
 
@@ -259,9 +273,12 @@ thead th:last-child{border-top-right-radius:6px}
           </div>
         </div>
         <div class="totals">
-          <div class="row"><span>SUBTOTAL</span><span id="subtotal">$0.00</span></div>
-          <div class="row"><span>TAX</span><span id="tax">$0.00</span></div>
-          <div class="row total"><span>TOTAL</span><span id="total">$0.00</span></div>
+          <div class="row"><span>Total Order</span><span id="subtotal">$0.00</span></div>
+          <div class="row"><span>Discount</span><span id="discount">$0.00</span></div>
+          <div class="row"><span>Total Order After Discount</span><span id="after-discount">$0.00</span></div>
+          <div class="row"><span>VAT 14%</span><span id="vat">$0.00</span></div>
+          <div class="row"><span>Shipping / Delivery</span><span id="shipping">$0.00</span></div>
+          <div class="row total"><span class="em">Amount Due</span><span id="total">$0.00</span></div>
         </div>
       </section>
 
@@ -294,7 +311,7 @@ thead th:last-child{border-top-right-radius:6px}
     const downloadBtn=document.getElementById('downloadBtn');
     const applyBtn=document.getElementById('applyClientBtn');
     const addItemBtn=document.getElementById('addItemBtn');
-    const TAX_RATE=0.0; // Adjust if needed
+    const VAT_RATE=0.14; // Optional VAT 14%
     function setBusy(isBusy){
       if(!downloadBtn) return;
       if(isBusy){
@@ -342,38 +359,55 @@ thead th:last-child{border-top-right-radius:6px}
     function applyClientToInvoice(){
       const get=(id)=>{const el=document.getElementById(id);return el?el.value.trim():""};
       const put=(id,text)=>{const el=document.getElementById(id);if(el) el.textContent=text};
-      const company=get('cf-company');
-      const client=get('cf-client-name');
-      const project=get('cf-project');
-      const area=get('cf-area');
-      const location=get('cf-location');
-      const contactPerson=get('cf-contact-person');
-      const contactNumber=get('cf-contact-number');
-      put('bt-company', company?`Company Name: ${company}`:'Company Name:');
-      put('bt-client', client?`Client Name: ${client}`:'Client Name:');
-      put('bt-project', project?`Project Name: ${project}`:'Project Name:');
-      put('bt-area', area?`Area: ${area}`:'Area:');
-      put('bt-location', location?`Location: ${location}`:'Location:');
-      put('bt-contact-person', contactPerson?`Contact Person: ${contactPerson}`:'Contact Person:');
-      put('bt-contact-number', contactNumber?`Contact Number: ${contactNumber}`:'Contact Number:');
+      put('bt-company', get('cf-company'));
+      put('bt-client', get('cf-client-name'));
+      put('bt-project', get('cf-project'));
+      put('bt-area', get('cf-area'));
+      put('bt-location', get('cf-location'));
+      put('bt-contact-person', get('cf-contact-person'));
+      put('bt-contact-number', get('cf-contact-number'));
     }
     if(applyBtn){ applyBtn.addEventListener('click', applyClientToInvoice); }
 
     function currency(n){return new Intl.NumberFormat(undefined,{style:'currency',currency:'USD',minimumFractionDigits:2}).format(n||0)}
+    function parseDiscount(input){
+      const raw=(input||'').trim();
+      if(!raw) return {type:'none',value:0};
+      if(/%\s*$/.test(raw)){
+        const num=parseFloat(raw.replace('%','').trim());
+        return {type:'percent',value:isNaN(num)?0:Math.max(0,num)};
+      }
+      const fixed=parseFloat(raw);
+      return {type:'fixed',value:isNaN(fixed)?0:Math.max(0,fixed)};
+    }
     function recalcTotals(){
       const rows=[...document.querySelectorAll('#items-body tr')];
       let subtotal=0;
       rows.forEach(r=>{const amt=parseFloat(r.dataset.amount||'0'); if(!isNaN(amt)) subtotal+=amt});
-      const tax=subtotal*TAX_RATE; const total=subtotal+tax;
+      const discSpec=parseDiscount((document.getElementById('disc-input')||{}).value||'');
+      let discount=0; if(discSpec.type==='percent'){ discount=subtotal*(discSpec.value/100); } else if(discSpec.type==='fixed'){ discount=discSpec.value; }
+      discount=Math.min(discount, subtotal);
+      const afterDiscount=subtotal-discount;
+      const vatApplied=!!(document.getElementById('vat-check')||{}).checked;
+      const vat=vatApplied? afterDiscount*VAT_RATE : 0;
+      const shippingVal=parseFloat((document.getElementById('ship-input')||{}).value||'0');
+      const shipping=isNaN(shippingVal)?0:Math.max(0,shippingVal);
+      const total=afterDiscount+vat+shipping;
       const setText=(id,val)=>{const el=document.getElementById(id); if(el) el.textContent=currency(val)};
-      setText('subtotal',subtotal); setText('tax',tax); setText('total',total);
+      setText('subtotal',subtotal);
+      setText('discount',discount);
+      setText('after-discount',afterDiscount);
+      setText('vat',vat);
+      setText('shipping',shipping);
+      setText('total',total);
     }
     function addItem(){
       const code=(document.getElementById('it-code')||{}).value||'';
       const type=(document.getElementById('it-type')||{}).value||'';
       const name=(document.getElementById('it-name')||{}).value||'';
       const color=(document.getElementById('it-color')||{}).value||'';
-      const qty=parseFloat((document.getElementById('it-qty')||{}).value||'0')||0;
+      const qtyInput=(document.getElementById('it-qty')||{}).value;
+      const qty=parseFloat(qtyInput===''?'1':(qtyInput||'1'))||1; // default to 1 if empty
       const price=parseFloat((document.getElementById('it-price')||{}).value||'0')||0;
       const amount=qty*price;
       const tbody=document.getElementById('items-body'); if(!tbody) return;
@@ -386,6 +420,7 @@ thead th:last-child{border-top-right-radius:6px}
       recalcTotals();
     }
     if(addItemBtn){ addItemBtn.addEventListener('click', addItem); }
+    ['disc-input','vat-check','ship-input'].forEach(id=>{ const el=document.getElementById(id); if(el){ el.addEventListener('input', recalcTotals); el.addEventListener('change', recalcTotals);} });
   })();
   </script>
   </body>
