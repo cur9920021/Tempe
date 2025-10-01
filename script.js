@@ -16,33 +16,39 @@
     }
   }
 
+  function getJsPDFCtor() {
+    if (window.jspdf && window.jspdf.jsPDF) return window.jspdf.jsPDF;
+    if (window.jsPDF) return window.jsPDF;
+    return null;
+  }
+
   async function exportPdf() {
     const invoiceEl = document.getElementById('invoice');
     if (!invoiceEl) throw new Error('Invoice element not found');
 
-    // Wait for web fonts to be ready to avoid FOUT in canvas
     if (document.fonts && document.fonts.ready) {
       try { await document.fonts.ready; } catch(_) {}
     }
 
+    const scale = Math.max(2, Math.min(3, window.devicePixelRatio || 2));
     const canvas = await window.html2canvas(invoiceEl, {
-      scale: 2,
+      scale,
       useCORS: true,
-      backgroundColor: null,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
       windowWidth: invoiceEl.scrollWidth,
       windowHeight: invoiceEl.scrollHeight
     });
 
     const imgData = canvas.toDataURL('image/jpeg', 0.98);
 
-    const { jsPDF } = window.jspdf || {};
-    if (!jsPDF) throw new Error('jsPDF not available');
+    const JsPDF = getJsPDFCtor();
+    if (!JsPDF) throw new Error('jsPDF not available');
 
-    const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+    const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
-    // Convert canvas px to mm; assume 96dpi
     const pxToMm = 25.4 / 96;
     const imgWidthMm = canvas.width * pxToMm;
     const imgHeightMm = canvas.height * pxToMm;
@@ -50,7 +56,6 @@
     const ratio = Math.min(pageWidth / imgWidthMm, pageHeight / imgHeightMm);
     const renderW = imgWidthMm * ratio;
     const renderH = imgHeightMm * ratio;
-
     const offsetX = (pageWidth - renderW) / 2;
     const offsetY = (pageHeight - renderH) / 2;
 
@@ -61,13 +66,12 @@
   downloadBtn.addEventListener('click', async function(){
     setBusy(true);
     try {
-      // Ensure libs available
       if (!window.html2canvas) throw new Error('html2canvas not loaded');
-      if (!window.jspdf) throw new Error('jsPDF not loaded');
+      if (!getJsPDFCtor()) throw new Error('jsPDF not loaded');
       await exportPdf();
     } catch (e) {
-      console.error('PDF export failed', e);
-      alert('PDF export failed. Please try again or check your connection.');
+      console.error('PDF export failed:', e && (e.stack || e.message) || e);
+      alert('PDF export failed. Please try again in a modern browser.');
     } finally {
       setBusy(false);
     }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Invoice - Matte Black Premium</title>
+<title>Invoice - Light Luxury</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,23 +11,23 @@
 </head>
 <body>
   <div id="invoice" class="page">
+    <div class="ribbon-top" aria-hidden="true"></div>
     <header class="header">
       <div class="brand">
         <div class="logo">ACME</div>
         <div class="brand-meta">
           <div>ACME Corporation</div>
-          <div>123 Luxury Ave, Suite 500</div>
+          <div>123 Heritage Plaza, Suite 500</div>
           <div>Metropolis, NY 10001</div>
           <div>+1 (212) 555-0199 • billing@acme.co</div>
         </div>
       </div>
-      <div class="header-accent" aria-hidden="true"></div>
       <div class="invoice-meta">
         <div class="invoice-title">INVOICE</div>
         <div class="meta-grid">
           <div>
             <div class="label">Invoice No.</div>
-            <div class="value" id="inv-number">INV-2025-001</div>
+            <div class="value" id="inv-number">INV-2025-045</div>
           </div>
           <div>
             <div class="label">Date</div>
@@ -46,7 +46,7 @@
         <div class="bill-from">
           <div class="section-title">From</div>
           <div class="text-sm">ACME Corporation</div>
-          <div class="text-sm">123 Luxury Ave, Suite 500</div>
+          <div class="text-sm">123 Heritage Plaza, Suite 500</div>
           <div class="text-sm">Metropolis, NY 10001</div>
           <div class="text-sm">Tax ID: 12-3456789</div>
         </div>
@@ -60,36 +60,38 @@
       </section>
 
       <section class="items">
-        <table class="item-table" cellspacing="0" cellpadding="0">
-          <thead>
-            <tr>
-              <th class="col-desc">Description</th>
-              <th class="col-qty">Qty</th>
-              <th class="col-rate">Rate</th>
-              <th class="col-amount">Amount</th>
-            </tr>
-          </thead>
-          <tbody id="items-body">
-            <tr>
-              <td>Enterprise consulting package</td>
-              <td>1</td>
-              <td>$12,000.00</td>
-              <td>$12,000.00</td>
-            </tr>
-            <tr>
-              <td>Security architecture review</td>
-              <td>1</td>
-              <td>$6,500.00</td>
-              <td>$6,500.00</td>
-            </tr>
-            <tr>
-              <td>On-site implementation support (3 days)</td>
-              <td>3</td>
-              <td>$1,250.00</td>
-              <td>$3,750.00</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="item-card">
+          <table class="item-table" cellspacing="0" cellpadding="0">
+            <thead>
+              <tr>
+                <th class="col-desc">Description</th>
+                <th class="col-qty">Qty</th>
+                <th class="col-rate">Rate</th>
+                <th class="col-amount">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="items-body">
+              <tr>
+                <td>Enterprise consulting package</td>
+                <td>1</td>
+                <td>$12,000.00</td>
+                <td>$12,000.00</td>
+              </tr>
+              <tr>
+                <td>Security architecture review</td>
+                <td>1</td>
+                <td>$6,500.00</td>
+                <td>$6,500.00</td>
+              </tr>
+              <tr>
+                <td>On-site implementation support (3 days)</td>
+                <td>3</td>
+                <td>$1,250.00</td>
+                <td>$3,750.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section class="summary">
@@ -106,7 +108,6 @@
     </main>
 
     <footer class="footer">
-      <div class="footer-accent" aria-hidden="true"></div>
       <div class="footer-grid">
         <div>
           <div class="label">Bank</div>
@@ -126,15 +127,15 @@
         </div>
       </div>
     </footer>
+    <div class="ribbon-bottom" aria-hidden="true"></div>
   </div>
 
   <div class="toolbar">
     <button id="downloadBtn" class="btn-primary">Download PDF</button>
   </div>
 
-  <!-- Switch to html2canvas + jsPDF CDNs for direct browser usage -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5lH8RCf8NwClfwimw5cPsp8Dh+GwF4mD1q6wPkX3WgX4t4rQhS2g4X7j5L0t7QHf3vI3yH5v0rjv0UQnQ0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-Yk1K4oKfGkz0H1kZp2kS9m0f8q2YF0JkQz3xN8u6y1O3gJ6Y7CwWQ2mLwX7O8vZ9lYwV1d1l5z7xQn4Y8k5Z2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="script.js"></script>
 </body>
 </html>
