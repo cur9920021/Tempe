@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Invoice - Align Fabrics & Curtains</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#0b0b0d; /* deep black header/footer */
+  --navy-2:#141418; /* table header dark */
+  --yellow:#e6b800; /* gold accent */
+  --yellow-2:#ffcc33; /* lighter gold accent */
+  --text:#1f212d;
+  --muted:#7b7f8f;
+  --border:#e7e9ef;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:#f5f6fb;
+  font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
+  color:var(--text);
+}
+
+.page{
+  width:794px; /* A4 portrait at 96dpi */
+  min-height:1123px;
+  margin:24px auto 96px;
+  background:#fff;
+  box-shadow:0 10px 30px rgba(16,26,51,.12);
+  border-radius:6px;
+  overflow:hidden;
+}
+
+/* Header */
+.header{
+  position:relative;
+  padding:0;
+}
+.header-top{
+  background:var(--navy);
+  color:#fff;
+  display:grid;
+  grid-template-columns:1fr 200px;
+  align-items:stretch;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px 22px;
+}
+.logo-box{
+  width:44px;height:44px;display:grid;place-items:center;
+  border:2px solid var(--yellow-2);border-radius:8px;cursor:pointer;position:relative;overflow:hidden;background:#0e0e12;
+}
+.logo-icon{width:22px;height:22px;border:2px solid var(--yellow-2);border-bottom:none;border-right:none;position:relative}
+.logo-icon:before{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%) rotate(45deg);width:14px;height:14px;border-left:2px solid var(--yellow-2);border-top:2px solid var(--yellow-2);background:transparent}
+.logo-box img{max-width:100%;max-height:100%;object-fit:contain;display:none}
+.brand-text{
+  display:flex;flex-direction:column;line-height:1.1
+}
+.brand-title{font-weight:800;letter-spacing:.4px;font-size:18px;color:#fff}
+.brand-sub{display:none}
+
+.top-right{
+  position:relative;background:#fff;color:var(--text);
+  padding:14px 18px 12px 18px;
+}
+.top-right:before{
+  content:"";position:absolute;left:-22px;top:0;width:22px;height:100%;background:var(--yellow);border-bottom-right-radius:10px;
+}
+.inv-meta{
+  display:grid;gap:6px;font-size:12px
+}
+.meta-row{display:flex;justify-content:space-between}
+.meta-label{color:var(--muted)}
+.meta-value{font-weight:600}
+
+.header-title{padding:18px 22px 6px 22px}
+.header-title h1{margin:0;font-size:22px;letter-spacing:1px}
+
+/* Parties */
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:4px 22px 0 22px}
+.card-head{color:#8dc63f;font-weight:700;font-size:12px;letter-spacing:.8px;margin-bottom:8px}
+.party p{margin:2px 0;font-size:12px;color:#3b3e4a}
+.party p .lbl{font-weight:600;color:#2c2f3d;display:inline-block;min-width:16ch}
+.party p .val{color:#2b2e3b}
+
+/* Table */
+.items{padding:16px 22px 0}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--navy-2);color:#fff;text-transform:uppercase;font-size:12px;letter-spacing:.6px;padding:10px 12px}
+tbody td{padding:10px 12px;font-size:12px;color:#2b2e3b;border-bottom:1px solid var(--border)}
+thead th:first-child{border-top-left-radius:6px}
+thead th:last-child{border-top-right-radius:6px}
+.col-desc{width:56%}
+.col-qty{width:10%}
+.col-price{width:17%}
+.col-total{width:17%;text-align:right}
+
+/* Payment + Totals */
+.bottom{display:grid;grid-template-columns:1fr 260px;gap:24px;padding:16px 22px}
+.payment{
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+}
+.payment .head{background:#fff3cc;color:#000;padding:10px 12px;font-weight:700;font-size:12px}
+.payment .body{padding:12px}
+.payment .body p{margin:4px 0;font-size:12px;color:#3a3d49}
+
+.totals{border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.totals .row{display:flex;justify-content:space-between;padding:8px 12px;font-size:12px;border-bottom:1px solid var(--border)}
+.totals .row:last-child{border-bottom:none}
+.totals .total{background:var(--yellow-2);color:#000;font-weight:700}
+.totals .em{font-weight:700}
+
+/* Terms */
+.terms{padding:10px 22px 20px}
+.terms .head{font-weight:700;font-size:12px;margin-bottom:6px}
+.terms p{margin:0;color:#6a6e7f;font-size:11px;line-height:1.6}
+
+/* Footer */
+.footer{
+  background:var(--navy);
+  color:#fff;
+  padding:10px 22px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;font-size:12px
+}
+.footer .left, .footer .right{display:flex;gap:18px;align-items:center}
+.footer a{color:#fff;text-decoration:none}
+
+/* Toolbar */
+.toolbar{position:sticky;bottom:0;display:flex;justify-content:center;padding:16px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.15))}
+.btn-primary{background:linear-gradient(180deg,#ffd84d,#ffcc00);color:#0a0a0a;border:none;padding:10px 16px;font-weight:700;border-radius:10px;cursor:pointer;box-shadow:0 8px 18px rgba(255,204,0,.28)}
+.btn-primary[disabled]{opacity:.6;cursor:not-allowed}
+
+/* Client form */
+.client-form{background:#fff;padding:14px 22px 0;border-bottom:1px solid var(--border)}
+.client-form-inner{border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.cf-head{background:var(--navy);color:#fff;padding:10px 12px;font-weight:700;letter-spacing:.3px}
+.cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.cf-field{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+.cf-field input{border:1px solid var(--border);border-radius:6px;padding:10px 10px;font-size:12px;outline:none}
+.cf-field input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,204,51,.25)}
+.cf-actions{display:flex;justify-content:flex-end;padding:0 12px 12px}
+.items-form{margin-top:12px}
+
+@media print{
+  body{background:#fff}
+  .toolbar{display:none!important}
+  .client-form{display:none}
+  .page{margin:0;box-shadow:none;width:210mm;min-height:297mm}
+}
+</style>
+</head>
+<body>
+  <section class="client-form" aria-label="Client information">
+      <div class="client-form-inner">
+        <div class="cf-head">Client Details</div>
+        <div class="cf-grid">
+          <label class="cf-field"><span>Company Name</span><input id="cf-company" type="text" placeholder="Client company"/></label>
+          <label class="cf-field"><span>Client Name</span><input id="cf-client-name" type="text" placeholder="Person receiving invoice"/></label>
+          <label class="cf-field"><span>Project Name</span><input id="cf-project" type="text" placeholder="Project"/></label>
+          <label class="cf-field"><span>Area</span><input id="cf-area" type="text" placeholder="Area"/></label>
+          <label class="cf-field"><span>Location</span><input id="cf-location" type="text" placeholder="Location"/></label>
+          <label class="cf-field"><span>Contact Person</span><input id="cf-contact-person" type="text" placeholder="Contact person"/></label>
+          <label class="cf-field"><span>Contact Number</span><input id="cf-contact-number" type="tel" placeholder="Contact number"/></label>
+        </div>
+        <div class="cf-actions">
+          <button id="applyClientBtn" class="btn-primary">Apply to Invoice</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="client-form items-form" aria-label="Invoice items">
+      <div class="client-form-inner">
+        <div class="cf-head">Invoice Items</div>
+        <div class="cf-grid">
+          <label class="cf-field"><span>Item Code</span><input id="it-code" type="text" placeholder="e.g. AF-001"/></label>
+          <label class="cf-field"><span>Item Type</span><input id="it-type" type="text" placeholder="e.g. Curtain"/></label>
+          <label class="cf-field"><span>Item Name</span><input id="it-name" type="text" placeholder="e.g. Blackout Fabric"/></label>
+          <label class="cf-field"><span>Item Color</span><input id="it-color" type="text" placeholder="e.g. Charcoal"/></label>
+          <label class="cf-field"><span>Quantity</span><input id="it-qty" type="number" min="0" step="1" placeholder="1"/></label>
+          <label class="cf-field"><span>Unit Price</span><input id="it-price" type="number" min="0" step="0.01" placeholder="0.00"/></label>
+        </div>
+        <div class="cf-actions">
+          <button id="addItemBtn" class="btn-primary">Add Item</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="client-form items-form" aria-label="Totals options">
+      <div class="client-form-inner">
+        <div class="cf-head">Totals & Adjustments</div>
+        <div class="cf-grid">
+          <label class="cf-field"><span>Discount (e.g. 10% or 50)</span><input id="disc-input" type="text" placeholder="0"/></label>
+          <label class="cf-field"><span>VAT 14%</span><div><input id="vat-check" type="checkbox"/> <span style="font-size:12px;color:#3b3e4a">Apply VAT</span></div></label>
+          <label class="cf-field"><span>Shipping / Delivery</span><input id="ship-input" type="number" min="0" step="0.01" placeholder="0.00"/></label>
+        </div>
+      </div>
+    </section>
+
+  <div id="invoice" class="page">
+    <header class="header">
+      <div class="header-top">
+        <div class="brand">
+          <div class="logo-box" id="logoBox" title="Click to upload logo"><div class="logo-icon" aria-hidden="true"></div><img id="brandLogo" alt="Company logo"/></div>
+          <div class="brand-text">
+            <div class="brand-title">Align Fabrics & Curtains</div>
+          </div>
+        </div>
+        <input id="logoInput" type="file" accept="image/*" style="display:none" aria-label="Upload company logo" />
+        <div class="top-right">
+          <div class="inv-meta">
+            <div class="meta-row"><span class="meta-label">NUMBER</span><span class="meta-value" id="inv-number">281920</span></div>
+            <div class="meta-row"><span class="meta-label">DATE</span><span class="meta-value" id="inv-date">13/06/22</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="header-title">
+        <h1>INVOICE</h1>
+      </div>
+    </header>
+
+    <main>
+      <section class="parties">
+        <div class="party">
+          <div class="card-head">FROM</div>
+          <p>Align Fabrics & Curtains</p>
+          <p>40 Mohamed Farid Street, Heliopolis, El Nozha</p>
+          <p>Cairo, Egypt</p>
+          <p>TRN: 652597947</p>
+        </div>
+        <div class="party" id="bill-to">
+          <div class="card-head">INVOICE TO</div>
+          <p><span class="lbl">Company Name:</span><span id="bt-company" class="val"></span></p>
+          <p><span class="lbl">Client Name:</span><span id="bt-client" class="val"></span></p>
+          <p><span class="lbl">Project Name:</span><span id="bt-project" class="val"></span></p>
+          <p><span class="lbl">Area:</span><span id="bt-area" class="val"></span></p>
+          <p><span class="lbl">Location:</span><span id="bt-location" class="val"></span></p>
+          <p><span class="lbl">Contact Person:</span><span id="bt-contact-person" class="val"></span></p>
+          <p><span class="lbl">Contact Number:</span><span id="bt-contact-number" class="val"></span></p>
+        </div>
+      </section>
+
+      <section class="items">
+        <table cellspacing="0" cellpadding="0">
+          <thead>
+            <tr>
+              <th class="col-desc">DESCRIPTION</th>
+              <th class="col-qty">QTY</th>
+              <th class="col-price">UNIT PRICE</th>
+              <th class="col-total">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="items-body"></tbody>
+        </table>
+      </section>
+
+      <section class="bottom">
+        <div class="payment">
+          <div class="head">PAYMENT METHOD</div>
+          <div class="body">
+            <p>Bank account</p>
+            <p>0000 0000 0000 0000</p>
+          </div>
+        </div>
+        <div class="totals">
+          <div class="row"><span>Total Order</span><span id="subtotal">$0.00</span></div>
+          <div class="row"><span>Discount</span><span id="discount">$0.00</span></div>
+          <div class="row"><span>Total Order After Discount</span><span id="after-discount">$0.00</span></div>
+          <div class="row"><span>VAT 14%</span><span id="vat">$0.00</span></div>
+          <div class="row"><span>Shipping / Delivery</span><span id="shipping">$0.00</span></div>
+          <div class="row total"><span class="em">Amount Due</span><span id="total">$0.00</span></div>
+        </div>
+      </section>
+
+      <section class="terms">
+        <div class="head">TERMS & CONDITIONS</div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet, metus vel suscipit bibendum, libero risus suscipit ipsum, at lacinia nunc mi at urna. Curabitur non odio at nunc facilisis placerat.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="left">
+        <span>www.realestate.com</span>
+        <span>|</span>
+        <a href="mailto:info@realestate.com">info@realestate.com</a>
+      </div>
+      <div class="right">
+        <span>+00 000 000 000</span>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toolbar">
+    <button id="downloadBtn" class="btn-primary">Download PDF</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+  (function(){
+    const downloadBtn=document.getElementById('downloadBtn');
+    const applyBtn=document.getElementById('applyClientBtn');
+    const addItemBtn=document.getElementById('addItemBtn');
+    const VAT_RATE=0.14; // Optional VAT 14%
+    const logoBox=document.getElementById('logoBox');
+    const logoInput=document.getElementById('logoInput');
+    const brandLogo=document.getElementById('brandLogo');
+    function setBusy(isBusy){
+      if(!downloadBtn) return;
+      if(isBusy){
+        downloadBtn.setAttribute('disabled','true');
+        downloadBtn.dataset.originalText=downloadBtn.textContent;
+        downloadBtn.textContent='Preparing PDF…';
+      }else{
+        downloadBtn.removeAttribute('disabled');
+        if(downloadBtn.dataset.originalText){
+          downloadBtn.textContent=downloadBtn.dataset.originalText;delete downloadBtn.dataset.originalText;
+        }
+      }
+    }
+    function getJsPDFCtor(){
+      if(window.jspdf&&window.jspdf.jsPDF) return window.jspdf.jsPDF; if(window.jsPDF) return window.jsPDF; return null;
+    }
+    async function nextFrame(){return new Promise(r=>requestAnimationFrame(()=>r()))}
+    async function exportPdf(){
+      const invoiceEl=document.getElementById('invoice');
+      if(!invoiceEl) throw new Error('Invoice element not found');
+      if(document.fonts&&document.fonts.ready){try{await document.fonts.ready;}catch(e){}}
+      await nextFrame();
+      const scale=Math.max(2,Math.min(3,window.devicePixelRatio||2));
+      const canvas=await window.html2canvas(invoiceEl,{scale,useCORS:true,allowTaint:true,backgroundColor:'#ffffff',windowWidth:invoiceEl.scrollWidth,windowHeight:invoiceEl.scrollHeight});
+      const imgData=canvas.toDataURL('image/jpeg',0.98);
+      const JsPDF=getJsPDFCtor(); if(!JsPDF) throw new Error('jsPDF not available');
+      const pdf=new JsPDF({orientation:'p',unit:'mm',format:'a4'});
+      const pageWidth=pdf.internal.pageSize.getWidth(); const pageHeight=pdf.internal.pageSize.getHeight();
+      const pxToMm=25.4/96; const imgWidthMm=canvas.width*pxToMm; const imgHeightMm=canvas.height*pxToMm;
+      const ratio=Math.min(pageWidth/imgWidthMm,pageHeight/imgHeightMm); const renderW=imgWidthMm*ratio; const renderH=imgHeightMm*ratio; const offsetX=(pageWidth-renderW)/2; const offsetY=(pageHeight-renderH)/2;
+      pdf.addImage(imgData,'JPEG',offsetX,offsetY,renderW,renderH,undefined,'FAST');
+      pdf.save('invoice.pdf');
+    }
+    downloadBtn.addEventListener('click',async function(){
+      setBusy(true);
+      try{
+        if(!window.html2canvas) throw new Error('html2canvas not loaded');
+        if(!getJsPDFCtor()) throw new Error('jsPDF not loaded');
+        await exportPdf();
+      }catch(e){
+        console.error('PDF export failed:',e&&(e.stack||e.message)||e);
+        alert('PDF export failed. Please try again in a modern browser.');
+      }finally{ setBusy(false); }
+    });
+    if(logoBox&&logoInput){
+      logoBox.addEventListener('click',()=>logoInput.click());
+      logoInput.addEventListener('change',()=>{
+        const file=logoInput.files&&logoInput.files[0];
+        if(!file) return;
+        const reader=new FileReader();
+        reader.onload=function(){
+          if(brandLogo){ brandLogo.src=String(reader.result||''); brandLogo.style.display='block'; }
+          const icon=logoBox.querySelector('.logo-icon'); if(icon) icon.style.display='none';
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    function applyClientToInvoice(){
+      const get=(id)=>{const el=document.getElementById(id);return el?el.value.trim():""};
+      const put=(id,text)=>{const el=document.getElementById(id);if(el) el.textContent=text};
+      put('bt-company', get('cf-company'));
+      put('bt-client', get('cf-client-name'));
+      put('bt-project', get('cf-project'));
+      put('bt-area', get('cf-area'));
+      put('bt-location', get('cf-location'));
+      put('bt-contact-person', get('cf-contact-person'));
+      put('bt-contact-number', get('cf-contact-number'));
+    }
+    if(applyBtn){ applyBtn.addEventListener('click', applyClientToInvoice); }
+
+    function currency(n){return new Intl.NumberFormat(undefined,{style:'currency',currency:'USD',minimumFractionDigits:2}).format(n||0)}
+    function parseDiscount(input){
+      const raw=(input||'').trim();
+      if(!raw) return {type:'none',value:0};
+      if(/%\s*$/.test(raw)){
+        const num=parseFloat(raw.replace('%','').trim());
+        return {type:'percent',value:isNaN(num)?0:Math.max(0,num)};
+      }
+      const fixed=parseFloat(raw);
+      return {type:'fixed',value:isNaN(fixed)?0:Math.max(0,fixed)};
+    }
+    function recalcTotals(){
+      const rows=[...document.querySelectorAll('#items-body tr')];
+      let subtotal=0;
+      rows.forEach(r=>{const amt=parseFloat(r.dataset.amount||'0'); if(!isNaN(amt)) subtotal+=amt});
+      const discSpec=parseDiscount((document.getElementById('disc-input')||{}).value||'');
+      let discount=0; if(discSpec.type==='percent'){ discount=subtotal*(discSpec.value/100); } else if(discSpec.type==='fixed'){ discount=discSpec.value; }
+      discount=Math.min(discount, subtotal);
+      const afterDiscount=subtotal-discount;
+      const vatApplied=!!(document.getElementById('vat-check')||{}).checked;
+      const vat=vatApplied? afterDiscount*VAT_RATE : 0;
+      const shippingVal=parseFloat((document.getElementById('ship-input')||{}).value||'0');
+      const shipping=isNaN(shippingVal)?0:Math.max(0,shippingVal);
+      const total=afterDiscount+vat+shipping;
+      const setText=(id,val)=>{const el=document.getElementById(id); if(el) el.textContent=currency(val)};
+      setText('subtotal',subtotal);
+      setText('discount',discount);
+      setText('after-discount',afterDiscount);
+      setText('vat',vat);
+      setText('shipping',shipping);
+      setText('total',total);
+    }
+    function addItem(){
+      const code=(document.getElementById('it-code')||{}).value||'';
+      const type=(document.getElementById('it-type')||{}).value||'';
+      const name=(document.getElementById('it-name')||{}).value||'';
+      const color=(document.getElementById('it-color')||{}).value||'';
+      const qtyInput=(document.getElementById('it-qty')||{}).value;
+      const qty=parseFloat(qtyInput===''?'1':(qtyInput||'1'))||1; // default to 1 if empty
+      const price=parseFloat((document.getElementById('it-price')||{}).value||'0')||0;
+      const amount=qty*price;
+      const tbody=document.getElementById('items-body'); if(!tbody) return;
+      const tr=document.createElement('tr');
+      tr.dataset.amount=String(amount);
+      const descParts=[code&&`[${code}]`, type, name, color&&`(${color})`].filter(Boolean);
+      const desc=descParts.join(' ');
+      tr.innerHTML=`<td>${desc||'Item'}</td><td>${qty}</td><td>${currency(price)}</td><td class="col-total">${currency(amount)}</td>`;
+      tbody.appendChild(tr);
+      recalcTotals();
+    }
+    if(addItemBtn){ addItemBtn.addEventListener('click', addItem); }
+    ['disc-input','vat-check','ship-input'].forEach(id=>{ const el=document.getElementById(id); if(el){ el.addEventListener('input', recalcTotals); el.addEventListener('change', recalcTotals);} });
+  })();
+  </script>
+  </body>
+  </html>
+
